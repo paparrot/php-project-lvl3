@@ -1,8 +1,12 @@
 start:
 	php artisan serve
 
-install:
+console:
+	php artisan tinker
+
+setup:
 	composer install
+	php artisan migrate
 	npm install
 
 deploy:
@@ -19,3 +23,6 @@ lint-fix:
 
 test:
 	php artisan test
+
+test-coverage:
+	php artisan test-coverage
