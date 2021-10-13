@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UrlController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [UrlController::class, 'create'])->name('url.create');
+Route::get('/urls', [UrlController::class, 'index'])->name('url.index');
+Route::post('/urls', [UrlController::class, 'store'])->name('url.store');
+Route::get('urls/{id}', [UrlController::class, 'show'])->name('url.show');
+
