@@ -40,17 +40,18 @@ class UrlController extends Controller
     {
         $data = $url->validated();
         $host = parse_url($data['url']['name'], PHP_URL_HOST);
+        $scheme = parse_url($data['url']['name'], PHP_URL_SCHEME);
         $existHosts = DB::table('urls')
-            ->where('name', '=', $host)
+            ->where('name', 'like', "{$scheme}://{$host}%")
             ->get()
             ->toArray();
         $isExists = !empty($existHosts);
         if ($isExists) {
-            flash("Страница уже существует");
+            flash("Сайт уже существует");
             return redirect()->route('url.index');
         }
         $item = [
-            'name' => $host,
+            'name' => $data['url']['name'],
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ];
