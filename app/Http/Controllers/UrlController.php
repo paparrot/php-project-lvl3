@@ -41,8 +41,9 @@ class UrlController extends Controller
         $data = $url->validated();
         $host = parse_url($data['url']['name'], PHP_URL_HOST);
         $scheme = parse_url($data['url']['name'], PHP_URL_SCHEME);
+        $siteName = "{$scheme}://{$host}";
         $existHosts = DB::table('urls')
-            ->where('name', 'like', "{$scheme}://{$host}%")
+            ->where('name', 'like', "$siteName")
             ->get()
             ->toArray();
         $isExists = !empty($existHosts);
@@ -51,7 +52,7 @@ class UrlController extends Controller
             return redirect()->route('url.index');
         }
         $item = [
-            'name' => $data['url']['name'],
+            'name' => $siteName,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ];
