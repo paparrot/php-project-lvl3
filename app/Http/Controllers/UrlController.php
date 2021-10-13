@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -16,7 +17,10 @@ class UrlController extends Controller
      */
     public function index()
     {
-        $urls = DB::table('urls')->orderBy('id')->get()->toArray();
+        $urls = DB::table('urls')
+            ->orderBy('id')
+            ->get()
+            ->toArray();
         return view('url.index', compact('urls'));
     }
 
