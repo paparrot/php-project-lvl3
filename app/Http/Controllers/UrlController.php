@@ -20,7 +20,13 @@ class UrlController extends Controller
         $urls = DB::table('urls')
             ->orderBy('id')
             ->get()
-            ->toArray();
+            ->each( fn($url) => $url->status_code = DB::table('url_checks')
+                ->where('url_id', $url->id)
+                ->orderByDesc('id')
+                ->select('status_code')
+                ->first()
+                ->status_code ?? '')
+            ->all();
         return view('url.index', compact('urls'));
     }
 
@@ -73,7 +79,7 @@ class UrlController extends Controller
      */
     public function show($id)
     {
-        [$url] = DB::table('urls')->where('id', $id)->get()->toArray();
+        $url = DB::table('urls')->where('id', $id)->first();
         $checks = DB::table('url_checks')->where('url_id', $id)->orderBy('id', 'desc')->get()->toArray();
         return view('url.show', compact('url', 'checks'));
     }

@@ -7,6 +7,7 @@ use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class UrlCheckTest extends TestCase
@@ -17,6 +18,7 @@ class UrlCheckTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Http::fake();
         $faker = Factory::create();
         $parsedUrl = parse_url($faker->url);
         $url = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
@@ -40,10 +42,12 @@ class UrlCheckTest extends TestCase
     {
         $urlId = $this->id;
         $time = Carbon::now();
+        $status = Http::get('')->status();
         $data = [
             'url_id' => $urlId,
             'created_at' => $time,
-            'updated_at' => $time
+            'updated_at' => $time,
+            'status_code' => $status
         ];
 
         $response = $this->post(route('url_check.store', $urlId), $data );
