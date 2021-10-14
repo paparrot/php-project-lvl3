@@ -82,8 +82,15 @@ class UrlController extends Controller
     public function show($id)
     {
         $url = DB::table('urls')->find($id);
+
         abort_unless($url, 404);
-        $checks = DB::table('url_checks')->where('url_id', $id)->orderBy('id', 'desc')->get()->toArray();
+
+        $checks = DB::table('url_checks')
+            ->where('url_id', $id)
+            ->orderBy('id', 'desc')
+            ->get()
+            ->toArray();
+
         return view('urls.show', compact('url', 'checks'));
     }
 

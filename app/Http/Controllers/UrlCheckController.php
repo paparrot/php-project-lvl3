@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use DiDom\Document;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Http\Client\HttpClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class UrlCheckController extends Controller
 {
@@ -44,7 +45,7 @@ class UrlCheckController extends Controller
                 ->update(['updated_at' => $data['updated_at']]);
 
             flash('Страница успешно проверена')->success();
-        } catch (\Exception $e) {
+        } catch (HttpClientException | RequestException $e) {
             flash($e->getMessage())->error();
         } finally {
             return redirect()
