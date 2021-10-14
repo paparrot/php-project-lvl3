@@ -36,14 +36,20 @@
             <table class="table table-bordered table-hover text-nowrap mt-3">
                 <tr>
                     <th>ID</th>
-                    <th>Дата создания</th>
                     <th>Код ответа</th>
+                    <th>h1</th>
+                    <th>keywords</th>
+                    <th>description</th>
+                    <th>Дата создания</th>
                 </tr>
                 @foreach($checks as $check)
                     <tr>
                         <td>{{$check->id}}</td>
-                        <td>{{$check->created_at}}</td>
                         <td>{{$check->status_code}}</td>
+                        <td>{{Str::limit($check->h1, 10)}}</td>
+                        <td>{{Str::limit($check->keywords, 10)}}</td>
+                        <td>{{Str::limit($check->description, 10)}}</td>
+                        <td>{{$check->created_at}}</td>
                     </tr>
                 @endforeach
             </table>
