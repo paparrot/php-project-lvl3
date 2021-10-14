@@ -14,6 +14,9 @@ class UrlCheckController extends Controller
     public function store($id)
     {
         $url = DB::table('urls')->find($id);
+
+        abort_unless($url, 404);
+
         try {
             $response = Http::get($url->name);
             $document = new Document($response->body());
