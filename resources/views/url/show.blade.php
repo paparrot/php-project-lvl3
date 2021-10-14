@@ -37,11 +37,13 @@
                 <tr>
                     <th>ID</th>
                     <th>Дата создания</th>
+                    <th>Код ответа</th>
                 </tr>
                 @foreach($checks as $check)
                     <tr>
                         <td>{{$check->id}}</td>
                         <td>{{$check->created_at}}</td>
+                        <td>{{$check->status_code}}</td>
                     </tr>
                 @endforeach
             </table>
