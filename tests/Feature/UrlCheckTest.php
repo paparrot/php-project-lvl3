@@ -25,14 +25,14 @@ class UrlCheckTest extends TestCase
         $parsedUrl = parse_url($faker->url);
         $url = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
         $data = [
-            'urls' => [
+            'url' => [
                 'name' => $url,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ]
         ];
 
-        $urlId = DB::table('urls')->insertGetId($data['urls']);
+        $urlId = DB::table('urls')->insertGetId($data['url']);
 
         $fakeHTML = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Fixtures', 'fake.html']));
 
@@ -40,7 +40,7 @@ class UrlCheckTest extends TestCase
             throw new \Exception('Не удалось загрузить контент из тестовой страницы');
         }
 
-        Http::fake([$data['urls']['name'] => Http::response($fakeHTML, 200)]);
+        Http::fake([$data['url']['name'] => Http::response($fakeHTML, 200)]);
 
         $expectedData = [
             'url_id' => $urlId,
