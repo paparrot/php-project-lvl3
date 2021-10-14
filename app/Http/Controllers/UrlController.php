@@ -49,26 +49,27 @@ class UrlController extends Controller
     public function store(UrlRequest $url)
     {
         $data = $url->validated();
-        $host = parse_url($data['url']['name'], PHP_URL_HOST);
-        $scheme = parse_url($data['url']['name'], PHP_URL_SCHEME);
-        $siteName = "{$scheme}://{$host}";
-        $existHosts = DB::table('urls')
-            ->where('name', 'like', "$siteName")
-            ->get()
-            ->toArray();
-        $isExists = !empty($existHosts);
-        if ($isExists) {
-            flash("Сайт уже существует");
-            return redirect()->route('url.index');
+        $parsedUrl = parse_url($data['url']['name']);
+        $url = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
+
+        $existedSite = DB::table('urls')
+            ->where('name', $url)
+            ->first();
+
+        if ($existedSite) {
+            flash("Страница уже существует");
+            return redirect()->route('url.show', $existedSite->id);
         }
-        $item = [
-            'name' => $siteName,
+
+        $data = [
+            'name' => $url,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ];
-        DB::table('urls')->insert($item);
-        flash('Сайт добавлен');
-        return redirect()->route('url.index');
+
+        $id = DB::table('urls')->insertGetId($data);
+        flash('Страница успешно добавлена')->success();
+        return redirect()->route('url.show', ['id' => $id]);
     }
 
     /**
@@ -79,7 +80,8 @@ class UrlController extends Controller
      */
     public function show($id)
     {
-        $url = DB::table('urls')->where('id', $id)->first();
+        $url = DB::table('urls')->find($id);
+        abort_unless($url, 404);
         $checks = DB::table('url_checks')->where('url_id', $id)->orderBy('id', 'desc')->get()->toArray();
         return view('url.show', compact('url', 'checks'));
     }

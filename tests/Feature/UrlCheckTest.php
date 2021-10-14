@@ -3,36 +3,17 @@
 namespace Tests\Feature;
 
 use Carbon\Carbon;
+use DiDom\Document;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class UrlCheckTest extends TestCase
 {
-    private $id;
     use RefreshDatabase;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-        Http::fake();
-        $faker = Factory::create();
-        $parsedUrl = parse_url($faker->url);
-        $url = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
-        $time = Carbon::now()->toDateTimeString();
-        $data = [
-            'url' => [
-                'name' => $url,
-                'created_at' => $time,
-                'updated_at' => $time
-            ]
-        ];
-        DB::table('urls')->insert($data['url']);
-        $this->id = DB::table('urls')->where('name', $url)->first()->id;
-    }
     /**
      * A basic feature test example.
      *
@@ -40,24 +21,39 @@ class UrlCheckTest extends TestCase
      */
     public function testStore()
     {
-        $urlId = $this->id;
-        $time = Carbon::now();
-        $status = Http::get('')->status();
+        $faker = Factory::create();
+        $parsedUrl = parse_url($faker->url);
+        $url = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
         $data = [
-            'url_id' => $urlId,
-            'created_at' => $time,
-            'updated_at' => $time,
-            'status_code' => $status
+            'url' => [
+                'name' => $url,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString()
+            ]
         ];
 
-        $response = $this->post(route('url_check.store', $urlId), $data );
+        $urlId = DB::table('urls')->insertGetId($data['url']);
 
+        $fakeHTML = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Fixtures', 'fake.html']));
+
+        if (!$fakeHTML) {
+            throw new \Exception('Не удалось загрузить контент из тестовой страницы');
+        }
+
+        Http::fake([$data['url']['name'] => Http::response($fakeHTML, 200)]);
+
+        $expectedData = [
+            'url_id' => $urlId,
+            'status_code' => 200,
+            'h1' => 'hello world',
+            'description' => 'hello world fake site',
+            'keywords' => 'hello, world'
+        ];
+
+        $response = $this->post(route('url_check.store', $urlId));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-
-        $this->assertDatabaseHas('url_checks', $data);
-
-        $updatedAt = DB::table('urls')->where('id', $urlId)->get('updated_at')->first()->updated_at;
-        $this->assertEquals($time, $updatedAt);
+        $url_checks = DB::table('url_checks')->get()->toArray();
+        $this->assertDatabaseHas('url_checks', $expectedData);
     }
 }
