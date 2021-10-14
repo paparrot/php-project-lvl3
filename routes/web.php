@@ -14,8 +14,8 @@ use App\Http\Controllers\UrlCheckController;
 |
 */
 
-Route::get('/', [UrlController::class, 'create'])->name('url.create');
-Route::get('/urls', [UrlController::class, 'index'])->name('url.index');
-Route::post('/urls', [UrlController::class, 'store'])->name('url.store');
-Route::get('urls/{id}', [UrlController::class, 'show'])->name('url.show');
-Route::post('/urls/{id}/check', [UrlCheckController::class, 'store'])->name('url_check.store');
+Route::get('/', [UrlController::class, 'create'])->name('urls.create');
+Route::get('/urls', [UrlController::class, 'index'])->name('urls.index');
+Route::post('/urls', [UrlController::class, 'store'])->name('urls.store');
+Route::get('/urls/{id}', [UrlController::class, 'show'])->name('urls.show');
+Route::post('/urls/{id}/check', [UrlCheckController::class, 'store'])->name('url_checks.store');

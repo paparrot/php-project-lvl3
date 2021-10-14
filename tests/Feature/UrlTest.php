@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class UrlTest extends TestCase
 {
     private $data;
+    use RefreshDatabase;
 
     public function setUp(): void
     {
@@ -36,20 +37,20 @@ class UrlTest extends TestCase
      */
     public function testIndex()
     {
-        $responce = $this->get(route('url.index'));
+        $responce = $this->get(route('urls.index'));
         $responce->assertOk();
     }
 
     public function testCreate()
     {
-        $response = $this->get(route('url.create'));
+        $response = $this->get(route('urls.create'));
         $response->assertOk();
     }
 
     public function testStore()
     {
         $data = $this->data;
-        $response = $this->post(route('url.store'), $data);
+        $response = $this->post(route('urls.store'), $data);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('urls', $data['url']);
@@ -59,7 +60,7 @@ class UrlTest extends TestCase
     {
         $url = $this->data['url'];
         $id = DB::table('urls')->insertGetId($url);
-        $response= $this->get(route('url.show', ['id' => $id]));
+        $response= $this->get(route('urls.show', ['id' => $id]));
         $response->assertOk();
     }
 }

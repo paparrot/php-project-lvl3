@@ -7,6 +7,7 @@ use DiDom\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class UrlCheckController extends Controller
 {
@@ -27,9 +28,9 @@ class UrlCheckController extends Controller
                 'status_code' => $status,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'h1' => $h1,
-                'keywords' => $keywords,
-                'description' => $description
+                'h1' => Str::limit($h1, 250),
+                'keywords' => Str::limit($keywords, 250),
+                'description' => Str::limit($description, 250)
             ];
 
             DB::table('url_checks')
@@ -44,7 +45,7 @@ class UrlCheckController extends Controller
             flash($e->getMessage())->error();
         } finally {
             return redirect()
-                ->route('url.show', $url->id);
+                ->route('urls.show', $url->id);
         }
     }
 }

@@ -25,14 +25,14 @@ class UrlCheckTest extends TestCase
         $parsedUrl = parse_url($faker->url);
         $url = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
         $data = [
-            'url' => [
+            'urls' => [
                 'name' => $url,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString()
             ]
         ];
 
-        $urlId = DB::table('urls')->insertGetId($data['url']);
+        $urlId = DB::table('urls')->insertGetId($data['urls']);
 
         $fakeHTML = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Fixtures', 'fake.html']));
 
@@ -40,7 +40,7 @@ class UrlCheckTest extends TestCase
             throw new \Exception('Не удалось загрузить контент из тестовой страницы');
         }
 
-        Http::fake([$data['url']['name'] => Http::response($fakeHTML, 200)]);
+        Http::fake([$data['urls']['name'] => Http::response($fakeHTML, 200)]);
 
         $expectedData = [
             'url_id' => $urlId,
@@ -50,10 +50,9 @@ class UrlCheckTest extends TestCase
             'keywords' => 'hello, world'
         ];
 
-        $response = $this->post(route('url_check.store', $urlId));
+        $response = $this->post(route('url_checks.store', $urlId));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $url_checks = DB::table('url_checks')->get()->toArray();
         $this->assertDatabaseHas('url_checks', $expectedData);
     }
 }

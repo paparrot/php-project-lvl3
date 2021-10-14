@@ -10,11 +10,11 @@
                 <div class="col-12 col-md-10 col-lg-8 mx-auto text-white">
                     <h1 class="display-3">Анализатор страниц</h1>
                     <p class="lead">Бесплатно проверяйте сайты на SEO пригодность</p>
-                    {{Form::open(['url' => route('url.store'), 'class' => 'd-flex justify-content-center'])}}
+                    {{ Form::open(['url' => route('urls.store'), 'class' => 'd-flex justify-content-center']) }}
                     @csrf
-                    {{Form::text("url[name]", '', ['class' => 'form-control form-control-lg', 'placeholder' => 'https://example.com'])}}
-                    {{Form::submit('Проверить', ['class' => 'btn btn-primary btn-lg ml-3 px-3 text-uppercase'])}}
-                    {{Form::close()}}
+                    {{ Form::text('url[name]', '', ['class' => 'form-control form-control-lg', 'placeholder' => 'https://example.com']) }}
+                    {{ Form::submit('Проверить', ['class' => 'btn btn-primary btn-lg ml-3 px-3 text-uppercase']) }}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

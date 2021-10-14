@@ -27,7 +27,7 @@ class UrlController extends Controller
                 ->first()
                 ->status_code ?? '')
             ->all();
-        return view('url.index', compact('urls'));
+        return view('urls.index', compact('urls'));
     }
 
     /**
@@ -37,7 +37,7 @@ class UrlController extends Controller
      */
     public function create()
     {
-        return view('url.create');
+        return view('urls.create');
     }
 
     /**
@@ -58,18 +58,19 @@ class UrlController extends Controller
 
         if ($existedSite) {
             flash("Страница уже существует");
-            return redirect()->route('url.show', $existedSite->id);
+            return redirect()->route('urls.show', $existedSite->id);
         }
 
         $data = [
-            'name' => $url,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'url' => [
+                'name' => $url,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
         ];
-
-        $id = DB::table('urls')->insertGetId($data);
+        $id = DB::table('urls')->insertGetId($data['url']);
         flash('Страница успешно добавлена')->success();
-        return redirect()->route('url.show', ['id' => $id]);
+        return redirect()->route('urls.show', ['id' => $id]);
     }
 
     /**
@@ -83,7 +84,7 @@ class UrlController extends Controller
         $url = DB::table('urls')->find($id);
         abort_unless($url, 404);
         $checks = DB::table('url_checks')->where('url_id', $id)->orderBy('id', 'desc')->get()->toArray();
-        return view('url.show', compact('url', 'checks'));
+        return view('urls.show', compact('url', 'checks'));
     }
 
     /**
