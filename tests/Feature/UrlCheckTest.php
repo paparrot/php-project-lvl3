@@ -36,11 +36,11 @@ class UrlCheckTest extends TestCase
 
         $fakeHTML = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Fixtures', 'fake.html']));
 
-        if (!$fakeHTML) {
+        if ($fakeHTML === false) {
             throw new \Exception('Не удалось загрузить контент из тестовой страницы');
         }
 
-        Http::fake([$data['url']['name'] => Http::response($fakeHTML, 200)]);
+        Http::fake([$url => Http::response($fakeHTML, 200)]);
 
         $expectedData = [
             'url_id' => $urlId,
