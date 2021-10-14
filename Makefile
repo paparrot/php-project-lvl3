@@ -1,13 +1,24 @@
 start:
 	php artisan serve
 
+setup:
+	composer install
+	cp -n .env.example .env
+	touch database/database.sqlite
+	php artisan migrate
+	npm install
+
+log:
+	tail -f storage/logs/laravel.log
+
 console:
 	php artisan tinker
 
-setup:
-	composer install
+migrate:
 	php artisan migrate
-	npm install
+
+migrate-reset:
+	php artisan migrate:reset
 
 deploy:
 	git push heroku
@@ -25,4 +36,4 @@ test:
 	php artisan test
 
 test-coverage:
-	php artisan test-coverage
+	php artisan test --coverage-clover build/logs/clover.xml
