@@ -44,7 +44,7 @@ class UrlCheckController extends Controller
                 ->update(['updated_at' => $data['updated_at']]);
 
             flash('Страница успешно проверена')->success();
-        } catch (ConnectionException $e) {
+        } catch (\Exception $e) {
             flash($e->getMessage())->error();
         }
 
