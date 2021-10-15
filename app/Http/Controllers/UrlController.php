@@ -20,7 +20,7 @@ class UrlController extends Controller
         $urls = DB::table('urls')
             ->oldest()
             ->paginate(10);
-        
+
         $checks = DB::table('url_checks')
             ->orderBy('url_id')
             ->latest()
