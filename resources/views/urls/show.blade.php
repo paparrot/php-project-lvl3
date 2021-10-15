@@ -27,7 +27,7 @@
             </tr>
         </table>
         <h2 class="mt-5 mb-3">Проверки</h2>
-        {{ Form::open(['url' => route('url_checks.store', $url->id)]) }}
+        {{ Form::open(['url' => secure_url('url_checks.store', $url->id)]) }}
         @csrf
         {{ Form::submit('Запустить проверку', ['class' => 'btn btn-primary']) }}
         {{ Form::close() }}
