@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class UrlTest extends TestCase
 {
     use RefreshDatabase;
+    
     private $data;
 
     public function setUp(): void

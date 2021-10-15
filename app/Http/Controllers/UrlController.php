@@ -20,7 +20,7 @@ class UrlController extends Controller
         $urls = DB::table('urls')
             ->orderBy('id')
             ->get()
-            ->each( fn ($url) => $url->status_code = DB::table('url_checks')
+            ->each(fn ($url) => $url->status_code = DB::table('url_checks')
                 ->where('url_id', $url->id)
                 ->orderByDesc('id')
                 ->select('status_code')
