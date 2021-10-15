@@ -18,16 +18,17 @@ class UrlController extends Controller
     public function index()
     {
         $urls = DB::table('urls')
-            ->orderBy('id')
+            ->oldest()
+            ->paginate(10);
+        
+        $checks = DB::table('url_checks')
+            ->orderBy('url_id')
+            ->latest()
+            ->distinct('url_id')
             ->get()
-            ->each(fn ($url) => $url->status_code = DB::table('url_checks')
-                ->where('url_id', $url->id)
-                ->orderByDesc('id')
-                ->select('status_code')
-                ->first()
-                ->status_code ?? '')
-            ->all();
-        return view('urls.index', compact('urls'));
+            ->keyBy('url_id');
+
+        return view('urls.index', compact('urls', 'checks'));
     }
 
     /**
@@ -89,8 +90,7 @@ class UrlController extends Controller
         $checks = DB::table('url_checks')
             ->where('url_id', $id)
             ->orderBy('id', 'desc')
-            ->get()
-            ->toArray();
+            ->paginate(10);
 
         return view('urls.show', compact('url', 'checks'));
     }

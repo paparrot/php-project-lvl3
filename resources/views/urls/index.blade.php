@@ -14,20 +14,22 @@
                     <th>Последняя проверка</th>
                     <th>Код ответа</th>
                 </tr>
-                @if(!empty($urls))
+                @if (!empty($urls))
 
-                    @foreach($urls as $url)
+                    @foreach ($urls as $url)
                         <tr>
-                            <td>{{$url->id}}</td>
-                            <td><a href="{{route('urls.show', $url->id)}}">{{$url->name}}</a></td>
-                            <td>{{$url->updated_at}}</td>
-                            <td>{{$url->status_code}}</td>
+                            <td>{{ $url->id }}</td>
+                            <td><a href="{{ route('urls.show', $url->id) }}">{{ $url->name }}</a></td>
+                            <td>{{ $url->updated_at }}</td>
+                            <td>{{ $checks[$url->id]->status_code ?? '' }}</td>
                         </tr>
                     @endforeach
 
                 @endif
             </table>
         </div>
+        <div class="d-flex justify-content-center">
+            {{ $urls->links() }}
+        </div>
     </div>
-
 @endsection

@@ -54,7 +54,9 @@
                 @endforeach
             </table>
         @endif
-
+        <div class="mt-3 d-flex">
+            {{ $checks->links() }}
+        </div>
     </div>
 
 @endsection
