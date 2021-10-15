@@ -19,9 +19,8 @@ class UrlCheckController extends Controller
         abort_unless($url, 404);
 
         try {
-            $response = Http::get($url->name);
+            $response = Http::timeout(3)->get($url->name);
             $document = new Document($response->body());
-
             $status = $response->status();
             $h1 = optional($document->first('h1'))->text();
             $description = optional($document->first('meta[name="description"]'))->getAttribute('content');
@@ -45,7 +44,7 @@ class UrlCheckController extends Controller
                 ->update(['updated_at' => $data['updated_at']]);
 
             flash('Страница успешно проверена')->success();
-        } catch (HttpClientException | RequestException $e) {
+        } catch (ConnectionException $e) {
             flash($e->getMessage())->error();
         }
 
