@@ -15,7 +15,7 @@ class UrlCheckController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  integer  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store($id)
