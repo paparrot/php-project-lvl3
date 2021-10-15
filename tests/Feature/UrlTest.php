@@ -15,8 +15,13 @@ class UrlTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $data;
+    private array $data;
 
+    /**
+     * Setup.
+     *
+     * @return void
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -31,8 +36,9 @@ class UrlTest extends TestCase
             ]
         ];
     }
+
     /**
-     * A basic feature test example.
+     * Index page test.
      *
      * @return void
      */
@@ -42,12 +48,22 @@ class UrlTest extends TestCase
         $responce->assertOk();
     }
 
+    /**
+     * Create page test.
+     *
+     * @return void
+     */
     public function testCreate()
     {
         $response = $this->get(route('urls.create'));
         $response->assertOk();
     }
 
+    /**
+     * Store test.
+     *
+     * @return void
+     */
     public function testStore()
     {
         $data = $this->data;
@@ -60,6 +76,11 @@ class UrlTest extends TestCase
         $this->assertDatabaseHas('urls', $data['url']);
     }
 
+    /**
+     * Show page test.
+     *
+     * @return void
+     */
     public function testShow()
     {
         $url = $this->data['url'];

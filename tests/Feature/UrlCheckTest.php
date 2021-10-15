@@ -15,7 +15,7 @@ class UrlCheckTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic feature test example.
+     * Store test.
      *
      * @return void
      */
