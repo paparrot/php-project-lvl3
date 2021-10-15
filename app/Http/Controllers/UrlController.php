@@ -13,7 +13,7 @@ class UrlController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -33,7 +33,7 @@ class UrlController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -43,8 +43,8 @@ class UrlController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\UrlRequest  $url
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(UrlRequest $url)
     {
@@ -56,7 +56,7 @@ class UrlController extends Controller
             ->where('name', $url)
             ->first();
 
-        if ($existedSite) {
+        if (!empty($existedSite)) {
             flash("Страница уже существует");
             return redirect()->route('urls.show', $existedSite->id);
         }
@@ -77,7 +77,7 @@ class UrlController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show($id)
     {
@@ -93,38 +93,5 @@ class UrlController extends Controller
 
         return view('urls.show', compact('url', 'checks'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }
