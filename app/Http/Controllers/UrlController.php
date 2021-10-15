@@ -56,7 +56,8 @@ class UrlController extends Controller
             ->where('name', $url)
             ->first();
 
-        if ($existedSite === false) {
+
+        if (!is_null($existedSite)) {
             flash("Страница уже существует");
             return redirect()->route('urls.show', $existedSite->id);
         }
