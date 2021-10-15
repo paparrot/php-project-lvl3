@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class UrlTest extends TestCase
 {
-    private $data;
     use RefreshDatabase;
+    private $data;
 
     public function setUp(): void
     {
@@ -60,7 +60,7 @@ class UrlTest extends TestCase
     {
         $url = $this->data['url'];
         $id = DB::table('urls')->insertGetId($url);
-        $response= $this->get(route('urls.show', ['id' => $id]));
+        $response = $this->get(route('urls.show', ['id' => $id]));
         $response->assertOk();
     }
 }
