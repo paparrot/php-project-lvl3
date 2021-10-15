@@ -93,5 +93,4 @@ class UrlController extends Controller
 
         return view('urls.show', compact('url', 'checks'));
     }
-    
 }
