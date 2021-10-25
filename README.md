@@ -1,6 +1,6 @@
 # Web-pages analyzer
 
-## [Demo](https://calm-tor-41403.herokuapp.com/)
+## [Demo](https://secure-shelf-87936.herokuapp.com/)
 
 ### Hexlet tests and linter status:
 
